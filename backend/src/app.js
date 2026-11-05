@@ -13,13 +13,24 @@ import { notFound } from './middleware/not-found.js';
 import apiRouter from './routes/index.js';
 
 function buildCspDirectives() {
+  // Flutter Web (CanvasKit renderer) needs exactly three external origins:
+  // - www.gstatic.com  : canvaskit.js / canvaskit.wasm (script + fetch)
+  // - fonts.gstatic.com: Google Fonts binary fetches (font + connect)
+  // WebAssembly compilation requires 'wasm-unsafe-eval' — the narrowest
+  // script-src token that permits wasm compilation without enabling eval().
+  // Everything else stays same-origin locked (API, images, frames).
   return {
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'"],
+    scriptSrc: [
+      "'self'",
+      "'unsafe-inline'",
+      "'wasm-unsafe-eval'",
+      'https://www.gstatic.com',
+    ],
     styleSrc: ["'self'", "'unsafe-inline'"],
     imgSrc: ["'self'", 'data:', 'blob:'],
-    fontSrc: ["'self'", 'data:'],
-    connectSrc: ["'self'"],
+    fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com'],
+    connectSrc: ["'self'", 'https://www.gstatic.com', 'https://fonts.gstatic.com'],
     workerSrc: ["'self'", 'blob:'],
     objectSrc: ["'none'"],
     baseUri: ["'self'"],

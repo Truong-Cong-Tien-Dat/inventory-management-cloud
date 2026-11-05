@@ -1639,6 +1639,12 @@ Tasks:
   immutable cache; `/api/health` → 200 JSON; `/api/*` 404 stays JSON;
   same-origin requests with `Origin` allowed, foreign origin 403.
 - [x] Regression: backend vitest **32/32 passed**; `flutter analyze` 0 issues.
+- [x] CSP fix after Docker runtime testing (user-reported blank screen): Helmet
+  `script-src` + `wasm-unsafe-eval` + `https://www.gstatic.com`, `connect-src` +
+  gstatic/fonts.gstatic.com, `font-src` + fonts.gstatic.com — only the origins
+  Flutter Web actually needs; all other restrictions preserved. Regression suite
+  `backend/tests/security-headers.test.js` (5 tests) added; backend vitest now
+  **37/37 passed**.
 - [x] Write `docs/DEPLOY_RENDER.md` (prerequisites, local build, GitHub prep,
   PostgreSQL config, Web Service creation, env vars, deploy steps, verification
   of the three demo functions, troubleshooting, screenshot checklist S1–S14).

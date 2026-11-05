@@ -1,0 +1,34 @@
+# Keep the build context small and never ship secrets into the image.
+
+# Git metadata
+.git
+.gitignore
+
+# Secrets — must never be copied into an image
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependencies (installed inside the image)
+**/node_modules
+
+# Local test/tooling artifacts
+backend/tests
+backend/scripts
+frontend/test
+frontend/tool
+frontend/.dart_tool
+database
+docs
+inventory-management
+**/*.log
+
+# Platform folders not needed for a web-only Flutter bundle
+frontend/ios
+frontend/macos
+frontend/windows
+frontend/linux
+frontend/web
+
+# NOTE: frontend/build is intentionally NOT ignored here — the prebuilt
+# Flutter Web bundle at frontend/build/web is copied into the image.
